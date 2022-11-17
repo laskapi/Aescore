@@ -11,20 +11,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RetrofitConstructor {
+object RetrofitClient {
     private const val BASE_URL: String = "http://192.168.0.213:8080/api/"
-    private val basicAuthInterceptor:BasicAuthInterceptor= BasicAuthInterceptor("super","super")
+
     private val httpLoggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         HttpLoggingInterceptor.Level.BODY.also { this.level = it }
     }
+    private val basicAuthInterceptor = BasicAuthInterceptor()
 
-    val client: OkHttpClient = OkHttpClient.Builder().apply {
-        this.addInterceptor(basicAuthInterceptor)
-        this.addInterceptor(httpLoggingInterceptor)
-    }.build()
+
+    fun setCredentials(credentials:String){
+        basicAuthInterceptor.setCredentials(credentials)
+    }
 
     @Provides
     fun getRetrofitInstance(): Retrofit {
+        val client: OkHttpClient = OkHttpClient.Builder().apply {
+            this.addInterceptor(httpLoggingInterceptor)
+            this.addInterceptor(basicAuthInterceptor)
+          }.build()
+
         return Retrofit.Builder().baseUrl(BASE_URL).client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

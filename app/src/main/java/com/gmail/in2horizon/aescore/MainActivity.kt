@@ -1,29 +1,27 @@
 package com.gmail.in2horizon.aescore
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.gmail.in2horizon.aescore.data.ApiService
-import com.gmail.in2horizon.aescore.data.SignInBody
+import com.gmail.in2horizon.aescore.model.LoginViewModel
 import com.gmail.in2horizon.aescore.ui.theme.AescoreTheme
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.ResponseBody
-import retrofit2.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var retrofit: Retrofit
+    val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Login()
 
                 }
             }
@@ -42,33 +40,38 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Greeting(name: String) {
+    fun Login() {
 
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Hello $name!")
+            var username by remember { mutableStateOf("") }
 
-        TextButton(onClick = {
-            val signInInfo = SignInBody("super", "super")
-            val apiService: ApiService = retrofit.create(ApiService::class.java)
-            apiService.signin().enqueue(object : Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "fail: "+t.message, Toast.LENGTH_LONG).show()
-                }
+            OutlinedTextField(value = username,
+                onValueChange = { username = it },
+                label = {
+                    Text(
+                        stringResource(R.string.username))
+                })
 
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
+            var password by remember{mutableStateOf("")}
 
-                    Toast.makeText(
-                        this@MainActivity, response.code().toString(), Toast
-                            .LENGTH_LONG
-                    ).show()
-                }
-            })
-        }) {
-            Text(text = "login")
+            OutlinedTextField(value = password,
+                onValueChange = { password = it },
+                label = {
+                    Text(
+                        stringResource(R.string.password))
+                },
+            visualTransformation = PasswordVisualTransformation())
+
+            TextButton(modifier = Modifier.wrapContentSize(), onClick = {
+                loginViewModel.signin(username,password)
+            }) {
+                val myText by loginViewModel.login.collectAsState()
+                Text(text = myText.toString())
+
+            }
 
         }
     }
@@ -78,7 +81,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         AescoreTheme {
-            Greeting("Android")
+            Login()
         }
     }
 }
