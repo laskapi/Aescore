@@ -2,7 +2,8 @@ package com.gmail.in2horizon.aescore
 
 import com.gmail.in2horizon.aescore.data.ApiService
 import com.gmail.in2horizon.aescore.data.RetrofitClient
-import com.gmail.in2horizon.aescore.data.UserRepository
+import com.gmail.in2horizon.aescore.data.UserCredentials
+import com.gmail.in2horizon.aescore.data.AescoreRepository
 import com.gmail.in2horizon.aescore.model.LoginViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -10,9 +11,7 @@ import kotlinx.coroutines.test.*
 import okhttp3.Credentials
 import okhttp3.ResponseBody
 import org.junit.*
-import retrofit2.Call
 import retrofit2.Response
-import retrofit2.Retrofit
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RetrofitLoginTest {
@@ -29,7 +28,7 @@ class RetrofitLoginTest {
         Dispatchers.resetMain()
     }
 
-    @Ignore
+
     @Test
     fun loginGetsHttp200() {
 
@@ -44,9 +43,9 @@ class RetrofitLoginTest {
 
     @Test
     fun loginFromViewModel() = runTest {
-        val repository = UserRepository()
+        val repository = AescoreRepository()
         val loginViewModel = LoginViewModel(repository)
-        loginViewModel.signin("super", "super").join()
+        loginViewModel.login(UserCredentials("super", "super"), onLoginSuccess()).join()
         Assert.assertEquals(true, loginViewModel.login.value)
     }
 

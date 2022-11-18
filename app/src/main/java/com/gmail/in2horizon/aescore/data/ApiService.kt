@@ -10,7 +10,8 @@ public interface ApiService {
 
     @Headers("Content-Type:application/json")
     @GET("login")
-    fun login(): Call<ResponseBody>
+    fun login(): Call<UserModel>
+
     @GET("users")
     fun getUsers(): Call<ResponseBody>
 
