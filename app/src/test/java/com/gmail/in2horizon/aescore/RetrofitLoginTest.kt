@@ -46,7 +46,7 @@ class RetrofitLoginTest {
         val repository = AescoreRepository()
         val loginViewModel = LoginViewModel(repository)
         loginViewModel.login(UserCredentials("super", "super"), onLoginSuccess()).join()
-        Assert.assertEquals(true, loginViewModel.login.value)
+        Assert.assertEquals(true, loginViewModel.isLoggedIn.value)
     }
 
 }

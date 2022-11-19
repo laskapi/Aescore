@@ -6,9 +6,7 @@ import com.gmail.in2horizon.aescore.data.UserCredentials
 import com.gmail.in2horizon.aescore.data.AescoreRepository
 import com.gmail.in2horizon.aescore.data.UserModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -18,8 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(val aescoreRepository: AescoreRepository) : ViewModel() {
 
-    private val _login = MutableStateFlow(false)
-    val login = _login.asStateFlow()
+
+    private val _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn = _isLoggedIn.asStateFlow()
 
     private val _user = MutableStateFlow(UserModel())
     val user=_user.asStateFlow()
@@ -34,7 +33,7 @@ class LoginViewModel @Inject constructor(val aescoreRepository: AescoreRepositor
             val response =
                 aescoreRepository.login(credentials.getCredentials()).awaitResponse()
 
-            _login.value = response.isSuccessful && response.code() == 200
+            _isLoggedIn.value = response.isSuccessful && response.code() == 200
 
             _user.value=response.body()?:UserModel()
 
