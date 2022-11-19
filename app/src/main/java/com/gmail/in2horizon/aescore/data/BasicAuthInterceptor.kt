@@ -4,7 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 
-class BasicAuthInterceptor constructor() :
+class BasicAuthInterceptor :
 Interceptor {
    private var credentials: String= ""
 

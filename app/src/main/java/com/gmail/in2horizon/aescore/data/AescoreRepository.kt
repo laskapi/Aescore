@@ -9,7 +9,7 @@ class AescoreRepository @Inject constructor() {
     private val retrofit: Retrofit = RetrofitClient.getRetrofitInstance()
     private val apiService: ApiService = retrofit.create(ApiService::class.java)
 
-    suspend fun login(credentials: String): Call<UserModel>{
+  fun login(credentials: String): Call<UserModel>{
         RetrofitClient.setCredentials(credentials)
         return apiService.login()
 

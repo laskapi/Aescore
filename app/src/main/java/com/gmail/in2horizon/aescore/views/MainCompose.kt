@@ -1,5 +1,6 @@
 package com.gmail.in2horizon.aescore.views
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,22 +21,23 @@ enum class AescoreScreen() {
 
 @Composable
 fun MainCompose() {
+    val loginViewModel: LoginViewModel =viewModel()
 
     val navController: NavHostController = rememberNavController()
-    val loginViewModel: LoginViewModel = viewModel()
-    val user by loginViewModel.user.collectAsState()
 
     NavHost(navController, AescoreScreen.Login.name) {
 
         composable(AescoreScreen.Login.name) {
-            LoginScreen(login = {
-                loginViewModel.login(it)
-            },
-                onLoginSuccess = {
-                    when (user.authority) {
-                        "Super" -> navController.navigate(AescoreScreen.Super.name)
-                        "Admin" -> navController.navigate(AescoreScreen.Admin.name)
-                    }
+
+            LoginScreen(loginViewModel,
+                    onLoginSuccess = {
+                 if(it.authority.equals("SUPER")){
+                     navController.navigate(AescoreScreen.Super.name)
+                 }
+                                     /*   when (it.authority) {
+                        "SUPER" -> navController.navigate(AescoreScreen.Super.name)
+                        "ADMIN" -> navController.navigate(AescoreScreen.Admin.name)
+                    }*/
                 },
             )
 
