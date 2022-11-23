@@ -26,8 +26,7 @@ class MainActivity : ComponentActivity() {
 
       // val loginViewModel: LoginViewModel by viewModels()
 
-    de
-    ,l
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val loginViewModel:LoginViewModel by viewModels<LoginViewModel>()

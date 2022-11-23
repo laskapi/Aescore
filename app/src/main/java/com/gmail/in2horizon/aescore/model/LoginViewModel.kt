@@ -24,8 +24,6 @@ AescoreRepository) :
     ViewModel() {
 
 
-
-
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 

@@ -1,11 +1,5 @@
 package com.gmail.in2horizon.aescore.views
 
-<<<<<<< HEAD
-=======
-import android.util.Log
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
->>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -27,7 +21,6 @@ import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.model.LoginViewModel
 
 @Composable
-<<<<<<< HEAD
 fun SuperScreen(
     loginViewModel: LoginViewModel, modifier: Modifier = Modifier
 ) {
@@ -41,10 +34,14 @@ fun SuperScreen(
     val contentDescription = stringResource(id = R.string.super_screen_description)
 
     val visible by loginViewModel.user.collectAsState()
-    AnimatedVisibility(visible = visible.authority.equals("SUPER"),enter = fadeIn
-        (animationSpec = tween
-        (2000))
-        ,) {
+    AnimatedVisibility(
+        visible = visible.authority.equals("SUPER"),
+        enter = fadeIn
+            (
+            animationSpec = tween
+                (2000)
+        ),
+    ) {
 
 
         Column(modifier = Modifier.semantics { this.contentDescription = contentDescription }) {
@@ -80,10 +77,4 @@ fun SuperScreen(
 
     }
 
-
-=======
-fun SuperScreen() {
-    Log.d("super","super")
- Text(text = "Witam SUPER")
->>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
 }

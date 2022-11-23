@@ -12,30 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.UserCredentials
-<<<<<<< HEAD
-import com.gmail.in2horizon.aescore.data.User
 import com.gmail.in2horizon.aescore.model.LoginViewModel
-=======
-import com.gmail.in2horizon.aescore.data.UserModel
-import com.gmail.in2horizon.aescore.model.LoginViewModel
-import kotlinx.coroutines.Job
->>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-<<<<<<< HEAD
 fun LoginScreen(
     loginViewModel: LoginViewModel
 ) {
-
-    val user by loginViewModel.user.collectAsState()
-=======
-fun LoginScreen(loginViewModel: LoginViewModel, onLoginSuccess: (UserModel) -> Unit) {
 
 
     //  val isLoggedIn by loginViewModel.isLoggedIn.collectAsState()
@@ -48,7 +35,6 @@ fun LoginScreen(loginViewModel: LoginViewModel, onLoginSuccess: (UserModel) -> U
     })
 
 
->>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -83,15 +69,11 @@ fun LoginScreen(loginViewModel: LoginViewModel, onLoginSuccess: (UserModel) -> U
         )
 
         TextButton(modifier = Modifier.wrapContentSize(), onClick = {
-<<<<<<< HEAD
 
             val credentials = UserCredentials(username, password)
             loginViewModel.login(credentials)
-=======
-            loginViewModel.login(UserCredentials(username, password))
             username = ""
             password = ""
->>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
 
         }) {
             Text(text = stringResource(R.string.login))

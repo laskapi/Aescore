@@ -51,6 +51,9 @@ class RetrofitLoginTest {
         val loginViewModel = LoginViewModel(repository)
         loginViewModel.login(UserCredentials("super", "super"), onLoginSuccess()).join()
         Assert.assertEquals(true, loginViewModel.isLoggedIn.value)
+<<<<<<< HEAD
+>>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
+=======
 >>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
     }
 
