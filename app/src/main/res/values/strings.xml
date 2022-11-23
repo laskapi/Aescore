@@ -3,4 +3,7 @@
     <string name="username">Name</string>
     <string name="password">Password</string>
     <string name="login">Log in</string>
+    <string name="users_tab">Users</string>
+    <string name="competitions_tab">Competitions</string>
+    <string name="super_screen_description">super_screen</string>
 </resources>
