@@ -6,4 +6,5 @@
     <string name="users_tab">Users</string>
     <string name="competitions_tab">Competitions</string>
     <string name="super_screen_description">super_screen</string>
+    <string name="users_nav_host">users_nav_host</string>
 </resources>

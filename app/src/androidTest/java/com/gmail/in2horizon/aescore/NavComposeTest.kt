@@ -21,7 +21,7 @@ class NavComposeTest {
 
         composeTestRule.setContent {
             AescoreTheme {
-                val loginViewModel = LoginViewModel(, AescoreRepository())
+                val loginViewModel = LoginViewModel(AescoreRepository())
                 NavCompose(loginViewModel = loginViewModel)
             }
         }

@@ -29,6 +29,7 @@ object RetrofitClient {
         val client: OkHttpClient = OkHttpClient.Builder().apply {
             this.addInterceptor(httpLoggingInterceptor)
             this.addInterceptor(basicAuthInterceptor)
+
           }.build()
 
         return Retrofit.Builder().baseUrl(BASE_URL).client(client)
