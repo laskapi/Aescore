@@ -1,6 +1,7 @@
 package com.gmail.in2horizon.aescore.views
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -9,6 +10,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -17,22 +19,15 @@ import com.gmail.in2horizon.aescore.data.UserCredentials
 import com.gmail.in2horizon.aescore.model.LoginViewModel
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel
-) {
+    loginViewModel: LoginViewModel) {
 
 
     //  val isLoggedIn by loginViewModel.isLoggedIn.collectAsState()
     val user by loginViewModel.user.collectAsState()
 
-    Log.d("compose", user.toString())
-    LaunchedEffect(key1 = user, block = {
-        onLoginSuccess(user)
-
-    })
 
 
 
@@ -67,13 +62,21 @@ fun LoginScreen(
             },
             visualTransformation = PasswordVisualTransformation()
         )
+        ////////////////////////////////////
+        // for testing login only:
+        //**************************
+        username="super"
+        password="super"
+        val credentials = UserCredentials(username, password)
+        loginViewModel.login(credentials)
+        //**************************
+        /////////////////////////////////////
 
         TextButton(modifier = Modifier.wrapContentSize(), onClick = {
 
+
             val credentials = UserCredentials(username, password)
             loginViewModel.login(credentials)
-            username = ""
-            password = ""
 
         }) {
             Text(text = stringResource(R.string.login))

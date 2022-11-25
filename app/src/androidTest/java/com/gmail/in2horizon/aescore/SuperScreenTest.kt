@@ -8,7 +8,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.gmail.in2horizon.aescore.data.AescoreRepository
 import com.gmail.in2horizon.aescore.model.LoginViewModel
 import com.gmail.in2horizon.aescore.ui.theme.AescoreTheme
-import com.gmail.in2horizon.aescore.views.SuperScreen
+import com.gmail.in2horizon.aescore.views.superuser.SuperScreen
+import com.gmail.in2horizon.aescore.views.superuser.SuperTabs
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 
@@ -27,7 +28,7 @@ class SuperScreenTest {
 
     @Test
     fun superTabsgetDisplayed() {
-       val loginViewModel= LoginViewModel(, AescoreRepository())
+       val loginViewModel= LoginViewModel(AescoreRepository())
 
 
         composeTestRule.setContent {
@@ -37,11 +38,14 @@ class SuperScreenTest {
         }
 
         val context: Context = InstrumentationRegistry.getInstrumentation().getTargetContext()
-        val usersTab = context.resources.getString(R.string.users_tab)
+        val usersTab = SuperTabs.UsersTab.name//context.resources.getString(R.string.users_tab)
+        val usersNavHost=context.resources.getString(R.string.users_nav_host)
+
+
         val competitionsTab = context.resources.getString(R.string.competitions_tab)
 
         composeTestRule.onNodeWithText(usersTab).performClick()
-        composeTestRule.onNodeWithText(usersTab+"Compose").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(usersNavHost).assertIsDisplayed()
 
 
         composeTestRule.onNodeWithText(competitionsTab).performClick()
