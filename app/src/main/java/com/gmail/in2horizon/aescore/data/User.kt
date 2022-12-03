@@ -1,17 +1,54 @@
 package com.gmail.in2horizon.aescore.data
 
-data class User(val username:String="", val password:String="", val authority:String=""):java.io.Serializable {
+import com.google.gson.annotations.SerializedName
+import java.util.*
+import kotlin.collections.HashSet
+import kotlin.collections.LinkedHashSet
 
-    override fun equals(other: Any?):Boolean{
+data class User(
+    @SerializedName("id") var id: Long = -1,
+    @SerializedName("username") var username: String = "",
+    @SerializedName("password") var password: String = "",
+    @SerializedName("email") var email:String="",
+    @SerializedName("authorities") var authorities: HashSet<Authority> = HashSet(),
+ /*       mutableEmptySet emptySet<Authority>(),
+ */   @SerializedName("competitions") var competitions: Set<Competition> = emptySet<Competition>()
 
-        if(this===other) return true
+) : java.io
+.Serializable {
+
+    fun isNotEmpty(): Boolean {
+        return (id != -1L) &&
+                username.isNotEmpty() &&
+                password.isNotEmpty() &&
+                email.isNotEmpty() &&
+                authorities.isNotEmpty()&&
+                competitions.isNotEmpty()
+    }
+
+    override fun equals(other: Any?): Boolean {
+
+        if (this === other) return true
         return false
     }
 
+
+
+    fun isSameAs(other: User): Boolean {
+    return hashCode()==other.hashCode()
+    }
+
     override fun hashCode(): Int {
-        var result = username.hashCode()
+        var result = id.hashCode()
+        result = 31 * result + username.hashCode()
         result = 31 * result + password.hashCode()
-        result = 31 * result + authority.hashCode()
+        result = 31 * result + email.hashCode()
+        result = 31 * result + authorities.hashCode()
+        result = 31 * result + competitions.hashCode()
         return result
     }
+
+
 }
+
+

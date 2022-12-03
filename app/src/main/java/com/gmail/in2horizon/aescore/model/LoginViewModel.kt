@@ -1,74 +1,123 @@
 package com.gmail.in2horizon.aescore.model
 
-import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.material3.Text
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.savedstate.SavedStateRegistryOwner
-import com.gmail.in2horizon.aescore.data.UserCredentials
+import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.AescoreRepository
+import com.gmail.in2horizon.aescore.data.Authority
 import com.gmail.in2horizon.aescore.data.User
+import com.gmail.in2horizon.aescore.data.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
+import java.net.HttpURLConnection
 import javax.inject.Inject
+import javax.net.ssl.HttpsURLConnection
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(/*private val savedStateHandle: SavedStateHandle,*/ val
-aescoreRepository:
-AescoreRepository) :
-    ViewModel() {
+class LoginViewModel @Inject constructor(
+    val aescoreRepository: AescoreRepository
+) : ViewModel() {
 
 
-    private val _isLoggedIn = MutableStateFlow(false)
-    val isLoggedIn = _isLoggedIn.asStateFlow()
+    private val TAG = "loginViewModel"
 
+    companion object {
+        const val NO_ERROR = -1
+    }
 
-
-    private val _user = MutableStateFlow(User())
-    val user = _user.asStateFlow()
-
-    //val user:StateFlow<User> = this.savedStateHandle.getStateFlow<User>("user",User())
+    private val _loggedInUuser = MutableStateFlow(User())
+    val loggedInUser = _loggedInUuser.asStateFlow()
 
     private val _users = MutableStateFlow(emptyList<User>())
     val users = _users.asStateFlow()
 
+    private val _errorMessage = MutableStateFlow(NO_ERROR)
+    val errorMessage = _errorMessage.asStateFlow()
+
+    lateinit var authorities: LinkedHashSet<Authority>
+
     fun login(credentials: UserCredentials): Job {
-
-
-
         return viewModelScope.launch {
-
-            //TODO data validation
-          try {
-              val response =
-                  aescoreRepository.login(credentials.getCredentials()).awaitResponse()
-
-            _isLoggedIn.value = response.isSuccessful && response.code() == 200
-//            savedStateHandle.set("user",response.body()?:User())
-            _user.value=response.body()?:User()
-          }catch(e: Exception){
-              Log.e("Exception","exception :: "+e.message)
-          }
+            _loggedInUuser.value = authenticate(credentials)
+            authorities= loadAuthorities()
+            Log.d(TAG,authorities.toString())
         }
+    }
+
+
+    suspend fun confirmAuthentication(credentials: UserCredentials): Boolean {
+        val user = authenticate(credentials)
+        return user.isSameAs(loggedInUser.value)
+    }
+
+    suspend private fun loadAuthorities(): LinkedHashSet<Authority> {
+        val response=aescoreRepository.getAuthorities().awaitResponse()
+        response.body()?.let { return it }
+
+        setErrorMessage(R.string.error_server)
+        return LinkedHashSet()
+
+    }
+
+    suspend private fun authenticate(credentials: UserCredentials): User {
+        val response = aescoreRepository.login(credentials.getCredentials()).awaitResponse()
+        response.body()?.let {
+            setErrorMessage(NO_ERROR)
+            return it
+        }
+        setErrorMessage(R.string.no_such_user)
+        return User()
+
     }
 
     fun loadUsers(): Job {
 
         return viewModelScope.launch {
             val response = aescoreRepository.getUsers().awaitResponse()
-            _users.value=response.body()?: emptyList()
+            _users.value = response.body().orEmpty()
+            if (response.code() != HttpsURLConnection.HTTP_OK) {
+                setErrorMessage(R.string.error_loading_users)
+            }
         }
+    }
+
+    fun deleteUser(user: User) {
+
+        viewModelScope.launch {
+            val response = aescoreRepository.deleteUser(user.id).awaitResponse()
+            when (response.code()) {
+                HttpURLConnection.HTTP_OK -> loadUsers()
+                HttpURLConnection.HTTP_PARTIAL ->
+                    setErrorMessage(R.string.couldnt_delete_user_set)
+
+            }
+        }
+
+    }
+
+
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            val response = aescoreRepository.updateUser(user).awaitResponse()
+            when (response.code()) {
+                HttpURLConnection.HTTP_OK -> loadUsers()
+                HttpURLConnection.HTTP_NOT_FOUND -> setErrorMessage(R.string.couldnt_find_user)
+
+            }
+        }
+    }
+
+    private fun setErrorMessage(messageId: Int) {
+        _errorMessage.value = messageId
+    }
+
+    fun clearErrorMessage() {
+        _errorMessage.value = NO_ERROR
     }
 }
 

@@ -62,7 +62,7 @@ fun SuperScreen(
             when (page) {
                 0 -> {
                     loginViewModel.loadUsers()
-                    UsersTab(loginViewModel.users)
+                    UsersTab(loginViewModel)
                 }
 
                 1 -> CompetitionsTab()

@@ -1,7 +1,5 @@
 package com.gmail.in2horizon.aescore.views
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -17,17 +15,17 @@ import androidx.compose.ui.unit.dp
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.UserCredentials
 import com.gmail.in2horizon.aescore.model.LoginViewModel
+import com.gmail.in2horizon.aescore.model.LoginViewModel.Companion.NO_ERROR
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel) {
+    loginViewModel: LoginViewModel
+) {
 
-
-    //  val isLoggedIn by loginViewModel.isLoggedIn.collectAsState()
-    val user by loginViewModel.user.collectAsState()
-
+    val user by loginViewModel.loggedInUser.collectAsState()
+    val error by loginViewModel.errorMessage.collectAsState()
 
 
 
@@ -40,15 +38,19 @@ fun LoginScreen(
 
         var username by remember { mutableStateOf("") }
 
-        OutlinedTextField(
-            modifier = Modifier.padding(20.dp),
-            value = username,
-            onValueChange = { username = it },
-            label = {
-                Text(
-                    stringResource(R.string.username)
-                )
-            })
+        if (error != NO_ERROR)
+        {
+            Text(text = stringResource(id = error), color = Color.Red)
+        }
+            OutlinedTextField(
+                modifier = Modifier.padding(20.dp),
+                value = username,
+                onValueChange = { username = it },
+                label = {
+                    Text(
+                        stringResource(R.string.username)
+                    )
+                })
 
         var password by remember { mutableStateOf("") }
 
@@ -65,10 +67,10 @@ fun LoginScreen(
         ////////////////////////////////////
         // for testing login only:
         //**************************
-        username="super"
-        password="super"
-        val credentials = UserCredentials(username, password)
-        loginViewModel.login(credentials)
+           username="super"
+          password="super"
+          val credentials = UserCredentials(username, password)
+          loginViewModel.login(credentials)
         //**************************
         /////////////////////////////////////
 
@@ -84,7 +86,7 @@ fun LoginScreen(
 
         LaunchedEffect(key1 = user, block = {
             username = user.username
-            password = user.authority
+            password = user.password
 
         })
 

@@ -21,4 +21,17 @@ class AescoreRepository @Inject constructor() {
         return apiService.getUsers()
     }
 
+    fun deleteUser(id: Long) :Call<List<String>>{
+        return apiService.deleteUser(id)
+    }
+
+    fun updateUser(user: User):Call<List<User>> {
+        return apiService.updateUser(user)
+    }
+
+    fun getAuthorities(): Call<LinkedHashSet<Authority>> {
+        return apiService.getAuthorities()
+    }
+
+
 }

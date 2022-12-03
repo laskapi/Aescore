@@ -7,4 +7,18 @@
     <string name="competitions_tab">Competitions</string>
     <string name="super_screen_description">super_screen</string>
     <string name="users_nav_host">users_nav_host</string>
+    <string name="retype_your_password_to_confirm">Retype Your password to confirm</string>
+    <string name="are_you_sure_to_delete_this_user">Are You sure to delete  this user?</string>
+    <string name="delete_user">Delete user</string>
+    <string name="couldnt_delete_user_set">Couldn\'t delete user bounded to competitions</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="choose_email_client">Choose an email client :</string>
+    <string name="email">Email</string>
+    <string name="save_and_exit">Save and exit</string>
+    <string name="change_password">Change password</string>
+    <string name="error_loading_users">Error loading users</string>
+    <string name="couldnt_find_user">Couldn\'t find user</string>
+    <string name="no_such_user">Please, type correct name and password.</string>
+    <string name="error_server">Server error</string>
 </resources>
