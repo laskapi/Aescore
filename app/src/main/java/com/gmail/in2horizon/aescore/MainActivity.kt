@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.gmail.in2horizon.aescore.model.CompetitionViewModel
 import com.gmail.in2horizon.aescore.model.LoginViewModel
 import com.gmail.in2horizon.aescore.ui.theme.AescoreTheme
 import com.gmail.in2horizon.aescore.views.NavCompose
@@ -19,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
        val loginViewModel: LoginViewModel by viewModels()
+    val competitionViewModel: CompetitionViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    NavCompose(loginViewModel)
+                    NavCompose(loginViewModel,competitionViewModel)
 
                 }
             }

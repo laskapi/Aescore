@@ -3,6 +3,7 @@ package com.gmail.in2horizon.aescore.views
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.*
 import com.gmail.in2horizon.aescore.data.User
+import com.gmail.in2horizon.aescore.model.CompetitionViewModel
 import com.gmail.in2horizon.aescore.model.LoginViewModel
 import com.gmail.in2horizon.aescore.views.superuser.SuperScreen
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -17,18 +18,18 @@ enum class AescoreScreen() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NavCompose(loginViewModel: LoginViewModel) {
+fun NavCompose(loginViewModel: LoginViewModel, compViewModel: CompetitionViewModel) {
 
     val user: User by loginViewModel.loggedInUser.collectAsState()
 
 
     when{
-        user.authorities.isNotEmpty()->SuperScreen(loginViewModel)
+        user.authorities.isNotEmpty()->SuperScreen(loginViewModel,compViewModel)
         else -> LoginScreen(loginViewModel = loginViewModel)
     }    
 
 
-    val navController = rememberAnimatedNavController()
+//    val navController = rememberAnimatedNavController()
 
   /*  AnimatedNavHost(navController, AescoreScreen.Login.name,
         enterTransition =

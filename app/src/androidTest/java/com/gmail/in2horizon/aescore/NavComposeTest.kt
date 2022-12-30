@@ -22,7 +22,10 @@ class NavComposeTest {
         composeTestRule.setContent {
             AescoreTheme {
                 val loginViewModel = LoginViewModel(AescoreRepository())
-                NavCompose(loginViewModel = loginViewModel)
+                NavCompose(
+                    loginViewModel = loginViewModel,
+                    compViewModel = competitionViewModel
+                )
             }
         }
         val context: Context = InstrumentationRegistry.getInstrumentation().getTargetContext()

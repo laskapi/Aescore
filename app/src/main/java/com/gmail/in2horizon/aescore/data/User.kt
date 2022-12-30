@@ -6,8 +6,8 @@ import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashSet
 
 data class User(
-    @SerializedName("id") var id: Long = -1,
-    @SerializedName("username") var username: String = "",
+    @SerializedName("id") var id: Long=-1L,
+    @SerializedName("username") var username: String="",
     @SerializedName("password") var password: String = "",
     @SerializedName("email") var email:String="",
     @SerializedName("authorities") var authorities: HashSet<Authority> = HashSet(),
@@ -19,11 +19,11 @@ data class User(
 
     fun isNotEmpty(): Boolean {
         return (id != -1L) &&
-                username.isNotEmpty() &&
-                password.isNotEmpty() &&
-                email.isNotEmpty() &&
-                authorities.isNotEmpty()&&
-                competitions.isNotEmpty()
+                username.isNotEmpty()
+                && password.isNotEmpty()
+                && email.isNotEmpty()
+            //    && authorities.isNotEmpty()
+            //    && competitions.isNotEmpty()
     }
 
     override fun equals(other: Any?): Boolean {

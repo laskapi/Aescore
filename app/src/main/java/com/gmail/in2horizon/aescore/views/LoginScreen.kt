@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.UserCredentials
 import com.gmail.in2horizon.aescore.model.LoginViewModel
-import com.gmail.in2horizon.aescore.model.LoginViewModel.Companion.NO_ERROR
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +38,7 @@ fun LoginScreen(
 
         var username by remember { mutableStateOf("") }
 
-        if (error != NO_ERROR)
+        if (error != loginViewModel.NO_ERROR)
         {
             Text(text = stringResource(id = error), color = Color.Red)
         }

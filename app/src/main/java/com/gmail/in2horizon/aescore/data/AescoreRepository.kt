@@ -1,5 +1,6 @@
 package com.gmail.in2horizon.aescore.data
 
+import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -21,17 +22,27 @@ class AescoreRepository @Inject constructor() {
         return apiService.getUsers()
     }
 
-    fun deleteUser(id: Long) :Call<List<String>>{
+    fun getUser(id: Long):Call<User> {
+        return apiService.getUser(id)
+    }
+
+    fun addUser(user: User): Call<ResponseBody> {
+        return apiService.addUser(user)
+    }
+
+    fun updateUser(user: User):Call<User> {
+        return apiService.updateUser(user)
+    }
+
+    fun deleteUser(id: Long) :Call<Void>{
         return apiService.deleteUser(id)
     }
 
-    fun updateUser(user: User):Call<List<User>> {
-        return apiService.updateUser(user)
-    }
 
     fun getAuthorities(): Call<LinkedHashSet<Authority>> {
         return apiService.getAuthorities()
     }
+
 
 
 }

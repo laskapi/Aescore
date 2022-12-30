@@ -28,7 +28,6 @@ fun EditButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
             },
             colors = IconButtonDefaults.filledIconButtonColors(containerColor = color)
         ) {
-            Text(text = "dsf",color= MaterialTheme.colorScheme.primary)
             Icon(Icons.Rounded.Edit, contentDescription = stringResource(id = R.string.edit))
         }
     }
