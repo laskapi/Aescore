@@ -2,7 +2,7 @@ package com.gmail.in2horizon.aescore
 
 
 import com.gmail.in2horizon.aescore.data.*
-import com.gmail.in2horizon.aescore.model.LoginViewModel
+import com.gmail.in2horizon.aescore.model.UsersViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -42,15 +42,15 @@ class RetrofitLoginTest {
 
     @Test
     fun loginFromViewModel() = runTest {
-        val repository = AescoreRepository()
+        val repository = UserRepository()
 <<<<<<< HEAD
-        val loginViewModel = LoginViewModel(, repository)
-        loginViewModel.login(UserCredentials("super", "super")).join()
-        Assert.assertEquals(true, loginViewModel.loggingAttempt.value)
+        val usersViewModel = UsersViewModel(, repository)
+        usersViewModel.login(UserCredentials("super", "super")).join()
+        Assert.assertEquals(true, usersViewModel.loggingAttempt.value)
 =======
-        val loginViewModel = LoginViewModel(repository)
-        loginViewModel.login(UserCredentials("super", "super"), onLoginSuccess()).join()
-        Assert.assertEquals(true, loginViewModel.isLoggedIn.value)
+        val usersViewModel = UsersViewModel(repository)
+        usersViewModel.login(UserCredentials("super", "super"), onLoginSuccess()).join()
+        Assert.assertEquals(true, usersViewModel.isLoggedIn.value)
 <<<<<<< HEAD
 >>>>>>> f1e5104e35007d69342a40fef3ece6f3a58f48d7
 =======

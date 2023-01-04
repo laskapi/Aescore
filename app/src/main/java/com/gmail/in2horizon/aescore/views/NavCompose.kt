@@ -1,12 +1,9 @@
 package com.gmail.in2horizon.aescore.views
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.*
-import com.gmail.in2horizon.aescore.data.User
-import com.gmail.in2horizon.aescore.model.CompetitionViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.in2horizon.aescore.model.LoginViewModel
 import com.gmail.in2horizon.aescore.views.superuser.SuperScreen
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 
 enum class AescoreScreen() {
@@ -16,46 +13,21 @@ enum class AescoreScreen() {
     User
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun NavCompose(loginViewModel: LoginViewModel, compViewModel: CompetitionViewModel) {
+fun NavCompose() {
 
-    val user: User by loginViewModel.loggedInUser.collectAsState()
-
-
-    when{
-        user.authorities.isNotEmpty()->SuperScreen(loginViewModel,compViewModel)
-        else -> LoginScreen(loginViewModel = loginViewModel)
-    }    
+    val loginViewModel: LoginViewModel = hiltViewModel()
+    val loggedIn by loginViewModel.loggedInUser.collectAsState()
 
 
-//    val navController = rememberAnimatedNavController()
-
-  /*  AnimatedNavHost(navController, AescoreScreen.Login.name,
-        enterTransition =
-    {slideInHorizontally(initialOffsetX = {1000})},
-        exitTransition =
-    { slideOutHorizontally{-1000}}
-    ){
-
-        composable(AescoreScreen.Login.name) {
-            LoginScreen(loginViewModel)
-        }
-        composable(AescoreScreen.Super.name) {
-            SuperScreen(loginViewModel)
-        }
+    when {
+        (loggedIn.get()!=null) -> SuperScreen()
+        else -> LoginScreen(
+            login = { loginViewModel.login(it) },
+            errorMessage = loginViewModel.errorMessage,
+         )
     }
 
 
-    when (user.authority) {
-        "SUPER" -> navController.navigate(AescoreScreen.Super.name){
-            popUpTo(AescoreScreen.Login.name) { inclusive = true }
-            launchSingleTop=true
-        }
-        else -> navController.navigate(AescoreScreen.Login.name){
-            launchSingleTop=true
-        }
-    }
-*/
 }
 

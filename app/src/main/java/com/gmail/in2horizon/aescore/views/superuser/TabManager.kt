@@ -13,7 +13,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.gmail.in2horizon.aescore.R
-import com.gmail.in2horizon.aescore.model.MyViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
@@ -23,14 +22,13 @@ enum class TabState {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TabUsers(
-    viewModel: MyViewModel,navController:NavHostController, listCompose: @Composable () -> Unit,
+fun TabManager(
+    navController: NavHostController,
+    listCompose: @Composable () -> Unit,
     detailCompose: @Composable () -> Unit
 ) {
 
-    val TAG = "tabUsers"
-
-
+    val TAG = "tabManager"
     val contentDescription = stringResource(id = R.string.users_nav_host)
 
     AnimatedNavHost(
@@ -58,7 +56,7 @@ fun TabUsers(
             arguments = listOf(navArgument("id") { type = NavType.LongType }),
             enterTransition = null,
             exitTransition = { ExitTransition.None }) { NavBackStackEntry ->
-        //    val id = NavBackStackEntry.arguments?.getLong("id") ?: viewModel.EMPTY_ID
+            //    val id = NavBackStackEntry.arguments?.getLong("id") ?: viewModel.EMPTY_ID
             detailCompose()
 
 

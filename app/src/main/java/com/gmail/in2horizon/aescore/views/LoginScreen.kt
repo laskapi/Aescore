@@ -1,6 +1,8 @@
 package com.gmail.in2horizon.aescore.views
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -14,20 +16,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.UserCredentials
-import com.gmail.in2horizon.aescore.model.LoginViewModel
-
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel
+    login: (UserCredentials) -> Job, errorMessage: StateFlow<String>
 ) {
 
-    val user by loginViewModel.loggedInUser.collectAsState()
-    val error by loginViewModel.errorMessage.collectAsState()
-
-
+    val errorMessage = errorMessage.collectAsState()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -37,26 +38,30 @@ fun LoginScreen(
         ) {
 
         var username by remember { mutableStateOf("") }
-
-        if (error != loginViewModel.NO_ERROR)
-        {
-            Text(text = stringResource(id = error), color = Color.Red)
-        }
-            OutlinedTextField(
-                modifier = Modifier.padding(20.dp),
-                value = username,
-                onValueChange = { username = it },
-                label = {
-                    Text(
-                        stringResource(R.string.username)
-                    )
-                })
-
         var password by remember { mutableStateOf("") }
+
+
+        Text(text = errorMessage.value, color = Color.Red)
+
+        OutlinedTextField(
+            modifier = Modifier.padding(20.dp),
+            value = username,
+            onValueChange = {
+                username = it
+            },
+            label = {
+                Text(
+                    stringResource(R.string.username)
+                )
+            },
+        )
+
 
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it
+            },
             label = {
                 Text(
                     stringResource(R.string.password)
@@ -67,29 +72,25 @@ fun LoginScreen(
         ////////////////////////////////////
         // for testing login only:
         //**************************
-           username="super"
-          password="super"
-          val credentials = UserCredentials(username, password)
-          loginViewModel.login(credentials)
-        //**************************
+                username = "super"
+                password = "super"
+                val credentials = UserCredentials(username, password)
+                login(credentials)
+                //**************************
         /////////////////////////////////////
 
         TextButton(modifier = Modifier.wrapContentSize(), onClick = {
+            scope.launch {
+                val job = login(UserCredentials(username, password))
+                job.join()
+                username = ""
+                password = ""
 
-
-            val credentials = UserCredentials(username, password)
-            loginViewModel.login(credentials)
+            }
 
         }) {
             Text(text = stringResource(R.string.login))
         }
-
-        LaunchedEffect(key1 = user, block = {
-            username = user.username
-            password = user.password
-
-        })
-
 
     }
 

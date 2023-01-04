@@ -5,8 +5,8 @@ import android.content.Context
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
-import com.gmail.in2horizon.aescore.data.AescoreRepository
-import com.gmail.in2horizon.aescore.model.LoginViewModel
+import com.gmail.in2horizon.aescore.data.UserRepository
+import com.gmail.in2horizon.aescore.model.UsersViewModel
 import com.gmail.in2horizon.aescore.ui.theme.AescoreTheme
 import com.gmail.in2horizon.aescore.views.superuser.SuperScreen
 import com.gmail.in2horizon.aescore.views.superuser.SuperTabs
@@ -28,12 +28,12 @@ class SuperScreenTest {
 
     @Test
     fun superTabsgetDisplayed() {
-       val loginViewModel= LoginViewModel(AescoreRepository())
+       val usersViewModel= UsersViewModel(UserRepository())
 
 
         composeTestRule.setContent {
             AescoreTheme {
-                SuperScreen(loginViewModel)
+                SuperScreen(usersViewModel)
             }
         }
 

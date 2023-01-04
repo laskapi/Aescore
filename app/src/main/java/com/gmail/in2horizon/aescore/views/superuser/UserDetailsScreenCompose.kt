@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.Authority
-import com.gmail.in2horizon.aescore.model.LoginViewModel
+import com.gmail.in2horizon.aescore.model.UsersViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.LinkedHashSet
@@ -22,13 +22,13 @@ import kotlin.collections.LinkedHashSet
 @Composable
 fun UserDetailsScreenCompose(
 
-    loginViewModel: LoginViewModel,
+    usersViewModel: UsersViewModel,
     back: () -> Unit
 ) {
 
     val TAG:String = "userDetailsScreenCompose"
-    val authorities = loginViewModel.authorities
-    val user=loginViewModel.selectedUser.collectAsState()
+    val authorities = usersViewModel.authorities
+    val user=usersViewModel.selectedUser.collectAsState()
 
     val coroutine= rememberCoroutineScope()
 
@@ -55,7 +55,7 @@ fun UserDetailsScreenCompose(
             OutlinedTextField(
                 modifier = Modifier.weight(0.7f),
                 value = user.value.username,
-                onValueChange = {loginViewModel.updateLocalSelectedUser(username=it)},
+                onValueChange = {usersViewModel.updateLocalSelectedUser(username=it)},
                 label = { Text(text = stringResource(id = R.string.username)) },
                 enabled = isEnabled
             )
@@ -73,7 +73,7 @@ fun UserDetailsScreenCompose(
             OutlinedTextField(
                 modifier = Modifier.weight(0.7f),
                 value = user.value.email,
-                onValueChange = {loginViewModel.updateLocalSelectedUser(email = it) },
+                onValueChange = {usersViewModel.updateLocalSelectedUser(email = it) },
                 label = { Text(text = stringResource(id = R.string.email)) },
                 enabled = isEnabled
             )
@@ -132,9 +132,9 @@ fun UserDetailsScreenCompose(
                 Text(text = stringResource(id = android.R.string.cancel))
             }
             OutlinedButton(onClick = {
-                correctPass?.ifEmpty{null}.let{loginViewModel.updateLocalSelectedUser(password = it)}
+                correctPass?.ifEmpty{null}.let{usersViewModel.updateLocalSelectedUser(password = it)}
                 coroutine.launch {
-                    if(loginViewModel.updateUser(user.value)) {
+                    if(usersViewModel.updateUser(user.value)) {
                         back()
                     }
                 }
