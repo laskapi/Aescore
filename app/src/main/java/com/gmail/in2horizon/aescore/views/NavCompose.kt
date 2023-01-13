@@ -2,8 +2,8 @@ package com.gmail.in2horizon.aescore.views
 
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.in2horizon.aescore.model.LoginViewModel
-import com.gmail.in2horizon.aescore.views.superuser.SuperScreen
+import com.gmail.in2horizon.aescore.viewModels.LoginViewModel
+import com.gmail.in2horizon.aescore.views.superComposables.SuperRootScreen
 
 
 enum class AescoreScreen() {
@@ -21,7 +21,7 @@ fun NavCompose() {
 
 
     when {
-        (loggedIn.get()!=null) -> SuperScreen()
+        (loggedIn.get()!=null) -> SuperRootScreen()
         else -> LoginScreen(
             login = { loginViewModel.login(it) },
             errorMessage = loginViewModel.errorMessage,

@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.model
+package com.gmail.in2horizon.aescore.viewModels
 
 import androidx.lifecycle.ViewModel
 import com.gmail.in2horizon.aescore.data.UserRepository

@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superuser
+package com.gmail.in2horizon.aescore.views.superComposables
 
 import android.util.Log
 import androidx.compose.foundation.border
@@ -9,10 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.Authority
-import com.gmail.in2horizon.aescore.model.UsersViewModel
+import com.gmail.in2horizon.aescore.viewModels.UsersViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.LinkedHashSet
@@ -20,17 +22,17 @@ import kotlin.collections.LinkedHashSet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDetailsScreenCompose(
+fun UserDetails(
 
     usersViewModel: UsersViewModel,
     back: () -> Unit
 ) {
 
-    val TAG:String = "userDetailsScreenCompose"
+    val TAG: String = "userDetailsScreenCompose"
     val authorities = usersViewModel.authorities
-    val user=usersViewModel.selectedUser.collectAsState()
+    val user = usersViewModel.selectedUser.collectAsState()
 
-    val coroutine= rememberCoroutineScope()
+    val coroutine = rememberCoroutineScope()
 
     var pass1 by remember {
         mutableStateOf("")
@@ -38,7 +40,7 @@ fun UserDetailsScreenCompose(
     var pass2 by remember {
         mutableStateOf("")
     }
-    var correctPass=if (pass1 == pass2) pass1 else null
+    var correctPass = if (pass1 == pass2) pass1 else null
 
     Column(
         Modifier.fillMaxSize(0.9f),
@@ -55,7 +57,7 @@ fun UserDetailsScreenCompose(
             OutlinedTextField(
                 modifier = Modifier.weight(0.7f),
                 value = user.value.username,
-                onValueChange = {usersViewModel.updateLocalSelectedUser(username=it)},
+                onValueChange = { usersViewModel.updateLocalSelectedUser(username = it) },
                 label = { Text(text = stringResource(id = R.string.username)) },
                 enabled = isEnabled
             )
@@ -73,7 +75,7 @@ fun UserDetailsScreenCompose(
             OutlinedTextField(
                 modifier = Modifier.weight(0.7f),
                 value = user.value.email,
-                onValueChange = {usersViewModel.updateLocalSelectedUser(email = it) },
+                onValueChange = { usersViewModel.updateLocalSelectedUser(email = it) },
                 label = { Text(text = stringResource(id = R.string.email)) },
                 enabled = isEnabled
             )
@@ -95,7 +97,8 @@ fun UserDetailsScreenCompose(
                     value = pass1,
                     onValueChange = { pass1 = it },
                     label = { Text(text = stringResource(id = R.string.change_password)) },
-                    enabled = isEnabled
+                    enabled = isEnabled,
+                    visualTransformation = PasswordVisualTransformation()
                 )
                 if (isEnabled) {
                     OutlinedTextField(
@@ -110,6 +113,8 @@ fun UserDetailsScreenCompose(
                             )
                         },
                         enabled = isEnabled,
+                        visualTransformation = PasswordVisualTransformation()
+
                     )
                 }
             }
@@ -132,19 +137,40 @@ fun UserDetailsScreenCompose(
                 Text(text = stringResource(id = android.R.string.cancel))
             }
             OutlinedButton(onClick = {
-                correctPass?.ifEmpty{null}.let{usersViewModel.updateLocalSelectedUser(password = it)}
+                correctPass?.ifEmpty { null }
+                    .let { usersViewModel.updateLocalSelectedUser(password = it) }
+
+              //  addRandomUserForTests(coroutine,usersViewModel::updateLocalSelectedUser)
                 coroutine.launch {
-                    if(usersViewModel.updateUser(user.value)) {
+                    val res = usersViewModel.updateUser().await()
+                    if (res) {
                         back()
                     }
                 }
-            }, enabled = (correctPass!=null)) {
+            }, enabled = (correctPass != null)) {
                 Text(text = stringResource(id = R.string.save_and_exit))
             }
 
         }
 
     }
+}
+
+fun addRandomUserForTests(coroutine: CoroutineScope,updateLocalUser:(String,String,String)->Unit) {
+        //////////for testing only
+        fun random(): String {
+            var str = "abcdefghijklmnopqrstuvwxyzABCD@$#*123456789"
+            var pass = ""
+            for (i in 1..12) {
+                pass += str.random()
+            }
+            return pass
+        }
+        updateLocalUser(
+            random(), random(),random()
+        )
+        ///////////////////////////////////////
+
 }
 
 

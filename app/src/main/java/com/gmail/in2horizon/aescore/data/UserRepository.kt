@@ -62,27 +62,47 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
         return apiService.getUsers()
     }
 
-    fun getUser(id: Long): Call<User> {
-        return apiService.getUser(id)
-    }
-
-    fun addUser(user: User): Call<ResponseBody> {
-        return apiService.addUser(user)
-    }
-
-    fun updateUser(user: User): Call<User> {
-        return apiService.updateUser(user)
-    }
-
-    suspend fun deleteUser(id: Long) : Response<Void> {
+    suspend fun getUser(id: Long?): User {
         return withContext(Dispatchers.IO) {
-           val response= apiService.deleteUser(id).awaitResponse()
+            id?.let {
+                val result = apiService.getUser(id).awaitResponse()
+                result.body()?.let { return@withContext it }
+                throw(Exception(context.getString(R.string.couldnt_find_user)))
+            }
+            return@withContext User()
+        }
+    }
 
-            when (response.code()){
-                HttpURLConnection.HTTP_PARTIAL->
+    suspend fun addUser(user: User): Response<ResponseBody> {
+
+        return withContext(Dispatchers.IO) {
+            val response = apiService.addUser(user).awaitResponse()
+            if (response.code()!=HttpURLConnection.HTTP_OK){
+                throw(Exception(response.errorBody().toString()))
+            }
+            response
+        }
+    }
+
+    suspend fun updateUser(user: User): Response<ResponseBody> {
+        return withContext(Dispatchers.IO) {
+           val response= apiService.updateUser(user).awaitResponse()
+            if (response.code()!=HttpURLConnection.HTTP_OK){
+                throw(Exception(response.errorBody().toString()))
+            }
+            response
+        }
+    }
+
+    suspend fun deleteUser(id: Long): Response<Void> {
+        return withContext(Dispatchers.IO) {
+            val response = apiService.deleteUser(id).awaitResponse()
+
+            when (response.code()) {
+                HttpURLConnection.HTTP_PARTIAL ->
                     throw (Exception(context.getString(R.string.couldnt_delete_user_bounded)))
             }
-             response
+            response
         }
     }
 

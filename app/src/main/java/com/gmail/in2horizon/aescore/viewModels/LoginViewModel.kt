@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.model
+package com.gmail.in2horizon.aescore.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,16 +14,9 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     val userRepository: UserRepository
 ) : ViewModel() {
-/*
-init {
-    viewModelScope.launch {
-        _loggedInUser.collect{state->loggedInUser}
-    }
-}
-*/
+
 
     // lateinit var authorities: LinkedHashSet<Authority>
-
     val loggedInUser= userRepository.loggedInUser
 
     private val _errorMessage = MutableStateFlow("")
@@ -40,25 +33,6 @@ init {
             }
         }
     }
-
-
-/*
-    suspend fun confirmAuthentication(password: String): Boolean {
-        val credentials = UserCredentials(loggedInUser.value.username, password)
-        val user = authenticate(credentials)
-        return user.isSameAs(loggedInUser.value)
-    }*/
-
- /*   suspend private fun authenticate(credentials: UserCredentials): Unit*//*User*//* {
-        try { *//*_loggedInUser.value =*//*
-            userRepository.login(credentials.getCredentials()).getOrThrow()
-        } catch (e: Exception) {
-
-            setErrorMessage(e.message)
-        }
-    }*/
-
-
     private fun setErrorMessage(message: String?) {
         _errorMessage.value = message ?: ""
     }

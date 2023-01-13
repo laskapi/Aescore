@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superuser
+package com.gmail.in2horizon.aescore.views.superComposables
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
@@ -10,8 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.gmail.in2horizon.aescore.R
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -52,8 +50,8 @@ fun TabManager(
             listCompose()
         }
 
-        composable(TabState.DETAILS.name + "/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.LongType }),
+        composable(TabState.DETAILS.name/* + "/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.LongType })*/,
             enterTransition = null,
             exitTransition = { ExitTransition.None }) { NavBackStackEntry ->
             //    val id = NavBackStackEntry.arguments?.getLong("id") ?: viewModel.EMPTY_ID

@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superuser
+package com.gmail.in2horizon.aescore.views.superComposables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superuser
+package com.gmail.in2horizon.aescore.views.superComposables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
@@ -50,6 +50,7 @@ fun DeleteEntityDialog(
                     } else {
                         errorMessage = incorrect_pass_msg
                     }
+                    password=""
                 }
 
             },

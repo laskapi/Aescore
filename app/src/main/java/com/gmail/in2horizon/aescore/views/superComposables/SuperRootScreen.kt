@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superuser
+package com.gmail.in2horizon.aescore.views.superComposables
 
 
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.User
-import com.gmail.in2horizon.aescore.model.UsersViewModel
+import com.gmail.in2horizon.aescore.viewModels.UsersViewModel
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -27,7 +27,7 @@ enum class SuperTabs() {
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun SuperScreen(
+fun SuperRootScreen(
 
 ) {
 
@@ -66,21 +66,27 @@ fun SuperScreen(
                 0 -> {
                     TabManager(navController, {
                         UsersList(items = usersViewModel.users,
+                            filter = { list, string -> filterUsers(list as List<User>, string) },
+                            errorMessage=usersViewModel.errorMessage,
+                            addNewItem={
+                                usersViewModel.loadSelectedUser(null)
+                                navController.navigate((TabState.DETAILS.name))
+                            },
                             listElement = {
                                 UsersListElement(
                                     user = it as User,
                                     showUserDetails = {
                                         usersViewModel.loadSelectedUser(it.id)
-                                        navController.navigate(TabState.DETAILS.name + "/${it.id}")
+                                        navController.navigate(TabState.DETAILS.name/* + "/${it.id}"*/)
                                     },
                                     deleteUser = { usersViewModel.deleteUser(it.id) },
-                                    confirmAuth = usersViewModel::confirmAuth
+                                    confirmAuth = usersViewModel::confirmAuthAsync
                                 )
-                            }, usersFilter = { list, string -> filterUsers(list as List<User>, string) },
-                                errorMessage=usersViewModel.errorMessage
+                            }
+
                         )
                     }, {
-                        UserDetailsScreenCompose(usersViewModel = usersViewModel,
+                        UserDetails(usersViewModel = usersViewModel,
                             back = { navController.navigate(TabState.LIST.name) })
 
                     }

@@ -23,7 +23,7 @@ public interface ApiService {
     fun addUser(@Body user: User): Call<ResponseBody>
 
     @PUT(value = "users")
-    fun updateUser(@Body user: User): Call<User>
+    fun updateUser(@Body user: User): Call<ResponseBody>
 
     @DELETE("users/{id}")
     fun deleteUser(@Path("id") id: Long): Call<Void>

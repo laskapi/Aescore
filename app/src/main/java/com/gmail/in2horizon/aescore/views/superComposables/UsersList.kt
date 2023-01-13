@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superuser
+package com.gmail.in2horizon.aescore.views.superComposables
 
 import android.content.Context
 import android.content.Intent
@@ -22,16 +22,17 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun UsersList(
     items: StateFlow<List<Any>>,
+    filter: (List<Any>, String) -> List<Any>,
+    errorMessage: StateFlow<MMessage>,
+    addNewItem:()->Unit,
     listElement: @Composable (item: Any) -> Unit,
-    usersFilter: (List<Any>, String) -> List<Any>,
-    errorMessage: StateFlow<MMessage>
 
-) {
+    ) {
 
 
     val TAG: String = "usersListScreenCompose"
 
-    val usersList by items.collectAsState()
+    val items by items.collectAsState()
     var searchText by remember {
         mutableStateOf("")
     }
@@ -70,14 +71,14 @@ fun UsersList(
                     .fillMaxWidth()
                     .fillMaxHeight(0.7f)
             ) {
-                items(usersFilter(usersList, searchText)  ) {
+                items(filter(items, searchText)  ) {
                     listElement(it)
                 }
             }
 
 
         ElevatedButton(
-            onClick = { /*showUserDetails(loginViewModel.EMPTY_ID) */ },
+            onClick = {addNewItem()},
         ) {
             Text(text = stringResource(id = R.string.add_new_user))
         }
