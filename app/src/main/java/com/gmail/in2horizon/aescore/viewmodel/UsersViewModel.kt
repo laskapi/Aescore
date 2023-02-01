@@ -1,21 +1,23 @@
-package com.gmail.in2horizon.aescore.viewModels
+package com.gmail.in2horizon.aescore.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.in2horizon.aescore.data.UserRepository
+import com.gmail.in2horizon.aescore.MMessage
 import com.gmail.in2horizon.aescore.data.Authority
 import com.gmail.in2horizon.aescore.data.User
-import com.gmail.in2horizon.aescore.views.MMessage
+import com.gmail.in2horizon.aescore.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import retrofit2.awaitResponse
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.net.ssl.HttpsURLConnection
 
 @HiltViewModel
-open class UsersViewModel @Inject constructor(val userRepository: UserRepository) : ViewModel() {
+class UsersViewModel @Inject constructor(userRepository: UserRepository) :
+    BaseViewModel(userRepository) {
 
 
     private val TAG = "usersViewModel"
@@ -34,27 +36,29 @@ open class UsersViewModel @Inject constructor(val userRepository: UserRepository
 
     init {
         loadUsers()
-    }
-
-    private fun loadUsers(): Job {
-
-        return viewModelScope.launch {
-            val response = userRepository.getUsers().awaitResponse()
-            _users.value = response.body().orEmpty()
-            authorities = loadAuthorities()
-
-            Log.d(TAG, "load users::" + users.value.toString())
-            if (response.code() != HttpsURLConnection.HTTP_OK) {
-                //      setErrorMessage(R.string.error_loading_users)
-            }
+        viewModelScope.launch {
+            authorities = userRepository.getAuthorities()/*loadAuthoritiesAsync().await()*/
         }
     }
 
-    fun confirmAuthAsync(password: String): Deferred<Boolean> {
-        return viewModelScope.async {
-            userRepository.confirmAuthentication(password)
+    private fun loadUsers() {
+        viewModelScope.launch {
+            _users.value = userRepository.getUsers()
         }
     }
+    /*   private fun loadUsers(): Job {
+
+           return viewModelScope.launch {
+               val response = userRepository.getUsers().awaitResponse()
+               _users.value = response.body().orEmpty()
+               authorities = loadAuthorities()
+
+               Log.d(TAG, "load users::" + users.value.toString())
+               if (response.code() != HttpsURLConnection.HTTP_OK) {
+                   //      setErrorMessage(R.string.error_loading_users)
+               }
+           }
+       }*/
 
 
     fun deleteUser(id: Long) {
@@ -90,11 +94,8 @@ open class UsersViewModel @Inject constructor(val userRepository: UserRepository
 
     }
 
-    suspend fun updateUser(/*user: User*/): Deferred<Boolean> {
-        /*  try {
-              userRepository.updateUser(user)
-          } catch(e:Exception) {
-       */
+    suspend fun updateUserAsync(): Deferred<Boolean> {
+
         return viewModelScope.async {
             try {
                 val EMPTY_ID = -1L
@@ -106,10 +107,8 @@ open class UsersViewModel @Inject constructor(val userRepository: UserRepository
                 loadUsers()
                 return@async true
             } catch (e: Exception) {
-                Log.d("exception3", e.message.toString())
                 return@async false
             }
-            // }
 
         }
     }
@@ -142,14 +141,13 @@ open class UsersViewModel @Inject constructor(val userRepository: UserRepository
     }
 */
 
-    suspend private fun loadAuthorities(): LinkedHashSet<Authority> {
-        val response = userRepository.getAuthorities().awaitResponse()
-        response.body()?.let { return it }
+  /*  private fun loadAuthoritiesAsync(): Deferred<LinkedHashSet<Authority>> {
 
-        //     setErrorMessage(R.string.error_server)
-        return LinkedHashSet()
+        return viewModelScope.async {
+            return@async userRepository.getAuthorities()
 
-    }
+        }
+    }*/
 
 
 }

@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superComposables
+package com.gmail.in2horizon.aescore.superview
 
 
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -12,8 +12,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.in2horizon.aescore.R
+import com.gmail.in2horizon.aescore.data.Competition
 import com.gmail.in2horizon.aescore.data.User
-import com.gmail.in2horizon.aescore.viewModels.UsersViewModel
+import com.gmail.in2horizon.aescore.viewmodel.CompsViewModel
+import com.gmail.in2horizon.aescore.viewmodel.UsersViewModel
+import com.gmail.in2horizon.aescore.views.`super`.ItemsList
+import com.gmail.in2horizon.aescore.views.`super`.UserDetails
+import com.gmail.in2horizon.aescore.views.`super`.UsersListElement
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -34,11 +39,9 @@ fun SuperRootScreen(
     val contentDescription = stringResource(id = R.string.super_screen_description)
 
     val navController = rememberAnimatedNavController()
-//    val errorMessage by loginViewModel.errorMessage.collectAsState()
-    //  var entityToDelete: Long? by remember { mutableStateOf(null) }
 
     val usersViewModel: UsersViewModel = hiltViewModel()
-
+    val compsViewModel: CompsViewModel = hiltViewModel()
 
     Column(modifier = Modifier.semantics { this.contentDescription = contentDescription }) {
         Text(text = "Witaj SUPER")
@@ -65,10 +68,10 @@ fun SuperRootScreen(
             when (page) {
                 0 -> {
                     TabManager(navController, {
-                        UsersList(items = usersViewModel.users,
+                        ItemsList(items = usersViewModel.users,
                             filter = { list, string -> filterUsers(list as List<User>, string) },
-                            errorMessage=usersViewModel.errorMessage,
-                            addNewItem={
+                            errorMessage = usersViewModel.errorMessage,
+                            addNewItem = {
                                 usersViewModel.loadSelectedUser(null)
                                 navController.navigate((TabState.DETAILS.name))
                             },
@@ -94,35 +97,57 @@ fun SuperRootScreen(
                     )
                 }
 
-                //     1 -> TabUsers(compViewModel)
+                1 -> TabManager(
+                    navController, {
+                        ItemsList(
+                            items = compsViewModel.comps,
+                            filter = { list, string ->
+                                filterComps(
+                                    list as List<Competition>,
+                                    string
+                                )
+                            },
+                            errorMessage = compsViewModel.errorMessage,
+                            addNewItem = {
+                                compsViewModel.loadSelectedComp(null)
+                                compsViewModel.loadUsers()
+                                navController.navigate((TabState.DETAILS.name))
+                            },
+                            listElement = {
+                                CompListElement(
+                                    item = it as Competition,
+                                    showDetails = {
+                                        compsViewModel.loadSelectedComp(it.id)
+                                        compsViewModel.loadUsers()
+                                        navController.navigate(TabState.DETAILS.name)
+                                    },
+                                    deleteItem = {compsViewModel.deleteComp(id = it.id)},
+                                    confirmAuth = compsViewModel::confirmAuthAsync
+                                )
+                            }
+                        )
+                    },
+                    {
+                        CompDetails(compViewModel=compsViewModel) { navController.navigate(TabState.LIST.name) }
+                    }
+                )
 
             }
 
         }
 
     }
-/*
-    if (errorMessage != loginViewModel.NO_ERROR && entityToDelete == null) {
-
-        val msg = stringResource(id = (errorMessage))
-        AlertDialog(onDismissRequest = { loginViewModel.clearErrorMessage() }, confirmButton = {
-            ElevatedButton(onClick = { loginViewModel.clearErrorMessage() }) {
-                Text(text = stringResource(id = android.R.string.ok))
-            }
-        }, text = { Text(text = msg, style = MaterialTheme.typography.titleLarge) })
-
-    }
-*/
-
-    //  entityToDelete?.let {
-//        DeleteEntityDialog(viewModel = loginViewModel, it, dismiss = { entityToDelete = null })
-    // }
-
 
 }
 
 fun filterUsers(list: List<User>, searchText: String): List<User> {
     return list.filter {
         it.username.contains(searchText, true) || it.email.contains(searchText, true)
+    }
+}
+
+fun filterComps(list: List<Competition>, searchText: String): List<Competition> {
+    return list.filter {
+        it.name.contains(searchText, true)
     }
 }

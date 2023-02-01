@@ -2,8 +2,6 @@ package com.gmail.in2horizon.aescore.data
 
 import com.google.gson.annotations.SerializedName
 import java.util.*
-import kotlin.collections.HashSet
-import kotlin.collections.LinkedHashSet
 
 data class User(
     @SerializedName("id") var id: Long=-1L,
@@ -26,11 +24,11 @@ data class User(
             //    && competitions.isNotEmpty()
     }
 
-    override fun equals(other: Any?): Boolean {
+   /* override fun equals(other: Any?): Boolean {
 
         if (this === other) return true
         return false
-    }
+    }*/
 
 
 
@@ -48,7 +46,9 @@ data class User(
         return result
     }
 
-
+    override fun toString(): String {
+        return username
+    }
 }
 
 

@@ -59,10 +59,24 @@ fun AescoreTheme(
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
         }
     }
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes= AescoreShapes,
         content = content
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

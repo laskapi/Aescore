@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.data
+package com.gmail.in2horizon.aescore.retrofit
 
 import okhttp3.Interceptor
 import okhttp3.Request

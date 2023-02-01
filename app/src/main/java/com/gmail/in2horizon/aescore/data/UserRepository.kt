@@ -1,8 +1,11 @@
 package com.gmail.in2horizon.aescore.data
 
 import android.content.Context
-import android.util.Log
+import com.gmail.in2horizon.aescore.LoggedInUser
 import com.gmail.in2horizon.aescore.R
+import com.gmail.in2horizon.aescore.UserCredentials
+import com.gmail.in2horizon.aescore.retrofit.ApiService
+import com.gmail.in2horizon.aescore.retrofit.RetrofitClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +22,13 @@ import javax.inject.Singleton
 
 
 @Singleton
-class UserRepository @Inject constructor(@ApplicationContext val context: Context) {
-    private val retrofit: Retrofit = RetrofitClient.getRetrofitInstance()
-    private val apiService: ApiService = retrofit.create(ApiService::class.java)
-
+class UserRepository @Inject constructor(
+    @ApplicationContext val context: Context,
+    val apiService: ApiService
+) {
+    /* private val retrofit: Retrofit = RetrofitClient.getRetrofitInstance()
+     private val apiService: ApiService = retrofit.create(ApiService::class.java)
+ */
     private val _loggedInUser = MutableStateFlow(LoggedInUser())
     val loggedInUser = _loggedInUser.asStateFlow()
 
@@ -58,9 +64,19 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
     }
 
 
-    fun getUsers(): Call<List<User>> {
-        return apiService.getUsers()
+    suspend fun getUsers(): List<User> {
+        return withContext(Dispatchers.IO) {
+
+            val response = apiService.getUsers().awaitResponse()
+
+            if (response.code() != HttpURLConnection.HTTP_OK) {
+                throw (Exception(response.errorBody().toString()))
+            }
+
+            return@withContext response.body() ?: emptyList()
+        }
     }
+
 
     suspend fun getUser(id: Long?): User {
         return withContext(Dispatchers.IO) {
@@ -77,7 +93,7 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
 
         return withContext(Dispatchers.IO) {
             val response = apiService.addUser(user).awaitResponse()
-            if (response.code()!=HttpURLConnection.HTTP_OK){
+            if (response.code() != HttpURLConnection.HTTP_OK) {
                 throw(Exception(response.errorBody().toString()))
             }
             response
@@ -86,8 +102,8 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
 
     suspend fun updateUser(user: User): Response<ResponseBody> {
         return withContext(Dispatchers.IO) {
-           val response= apiService.updateUser(user).awaitResponse()
-            if (response.code()!=HttpURLConnection.HTTP_OK){
+            val response = apiService.updateUser(user).awaitResponse()
+            if (response.code() != HttpURLConnection.HTTP_OK) {
                 throw(Exception(response.errorBody().toString()))
             }
             response
@@ -107,8 +123,15 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
     }
 
 
-    fun getAuthorities(): Call<LinkedHashSet<Authority>> {
-        return apiService.getAuthorities()
+    suspend fun getAuthorities(): LinkedHashSet<Authority> {
+        return withContext(Dispatchers.IO) {
+            val response = apiService.getAuthorities().awaitResponse()
+
+            return@withContext response.body() ?: LinkedHashSet()
+
+        }
+
+
     }
 
 

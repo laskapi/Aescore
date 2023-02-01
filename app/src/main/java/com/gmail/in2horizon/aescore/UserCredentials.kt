@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.data
+package com.gmail.in2horizon.aescore
 
 import okhttp3.Credentials
 

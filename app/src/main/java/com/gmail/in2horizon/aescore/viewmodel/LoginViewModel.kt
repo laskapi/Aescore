@@ -1,7 +1,8 @@
-package com.gmail.in2horizon.aescore.viewModels
+package com.gmail.in2horizon.aescore.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.in2horizon.aescore.UserCredentials
 import com.gmail.in2horizon.aescore.data.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

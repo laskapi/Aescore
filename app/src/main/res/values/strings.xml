@@ -21,9 +21,14 @@
     <string name="couldnt_find_user">Couldn\'t find user</string>
     <string name="no_such_user">Please, type correct name and password.</string>
     <string name="error_server">Server error</string>
-    <string name="add_new_user">Add new user</string>
+    <string name="add_new">Add new</string>
     <string name="incorrect_name_or_password">Incorrect name or password</string>
     <string name="error_user_already_exists">User already exists</string>
     <string name="type_to_search">Type to search...</string>
     <string name="incorrect_password">Incorrect password</string>
+    <string name="select">Select</string>
+    <string name="select_value">Select</string>
+    <string name="admin">admin</string>
+    <string name="user">User</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superComposables
+package com.gmail.in2horizon.aescore.superview
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*

@@ -6,10 +6,10 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.gmail.in2horizon.aescore.data.UserRepository
-import com.gmail.in2horizon.aescore.viewModels.UsersViewModel
+import com.gmail.in2horizon.aescore.viewmodel.UsersViewModel
 import com.gmail.in2horizon.aescore.ui.theme.AescoreTheme
-import com.gmail.in2horizon.aescore.views.superComposables.SuperRootScreen
-import com.gmail.in2horizon.aescore.views.superComposables.SuperTabs
+import com.gmail.in2horizon.aescore.views.`super`.SuperRootScreen
+import com.gmail.in2horizon.aescore.views.`super`.SuperTabs
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 

@@ -1,7 +1,5 @@
-package com.gmail.in2horizon.aescore.views.superComposables
+package com.gmail.in2horizon.aescore.views.`super`
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,14 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.gmail.in2horizon.aescore.R
-import com.gmail.in2horizon.aescore.views.MMessage
+import com.gmail.in2horizon.aescore.MMessage
 import com.gmail.in2horizon.aescore.views.MToast
 import kotlinx.coroutines.flow.StateFlow
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsersList(
+fun ItemsList(
     items: StateFlow<List<Any>>,
     filter: (List<Any>, String) -> List<Any>,
     errorMessage: StateFlow<MMessage>,
@@ -71,8 +69,8 @@ fun UsersList(
                     .fillMaxWidth()
                     .fillMaxHeight(0.7f)
             ) {
-                items(filter(items, searchText)  ) {
-                    listElement(it)
+                items(filter(items, searchText)) {
+                      listElement(it)
                 }
             }
 
@@ -80,21 +78,10 @@ fun UsersList(
         ElevatedButton(
             onClick = {addNewItem()},
         ) {
-            Text(text = stringResource(id = R.string.add_new_user))
+            Text(text = stringResource(id = R.string.add_new))
         }
     }
 }
 
 
-fun sendMail(email: String, ctx: Context) {
-    val i = Intent(Intent.ACTION_SENDTO)
-    i.putExtra(Intent.EXTRA_EMAIL, email)
-    ctx.startActivity(
-        Intent.createChooser(
-            i, ctx.getString(
-                R.string.choose_email_client
-            )
-        )
-    )
-}
 

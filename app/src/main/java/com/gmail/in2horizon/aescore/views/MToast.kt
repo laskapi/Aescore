@@ -3,6 +3,7 @@ package com.gmail.in2horizon.aescore.views
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.gmail.in2horizon.aescore.MMessage
 
 @Composable
 fun MToast(message: MMessage){

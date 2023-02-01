@@ -1,4 +1,6 @@
-package com.gmail.in2horizon.aescore.data
+package com.gmail.in2horizon.aescore
+
+import com.gmail.in2horizon.aescore.data.User
 
 class LoggedInUser(u: User? = null) {
 

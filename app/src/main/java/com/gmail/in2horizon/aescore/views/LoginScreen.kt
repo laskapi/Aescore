@@ -1,8 +1,6 @@
 package com.gmail.in2horizon.aescore.views
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -15,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.gmail.in2horizon.aescore.R
-import com.gmail.in2horizon.aescore.data.UserCredentials
+import com.gmail.in2horizon.aescore.UserCredentials
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

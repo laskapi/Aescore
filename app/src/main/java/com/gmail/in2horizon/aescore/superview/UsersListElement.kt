@@ -1,5 +1,7 @@
-package com.gmail.in2horizon.aescore.views.superComposables
+package com.gmail.in2horizon.aescore.views.`super`
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -84,4 +86,15 @@ fun UsersListElement(
             dismiss = { showDeleteDialog = false })
     }
 
+}
+fun sendMail(email: String, ctx: Context) {
+    val i = Intent(Intent.ACTION_SENDTO)
+    i.putExtra(Intent.EXTRA_EMAIL, email)
+    ctx.startActivity(
+        Intent.createChooser(
+            i, ctx.getString(
+                R.string.choose_email_client
+            )
+        )
+    )
 }

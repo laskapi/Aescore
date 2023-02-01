@@ -2,8 +2,8 @@ package com.gmail.in2horizon.aescore.views
 
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.in2horizon.aescore.viewModels.LoginViewModel
-import com.gmail.in2horizon.aescore.views.superComposables.SuperRootScreen
+import com.gmail.in2horizon.aescore.viewmodel.LoginViewModel
+import com.gmail.in2horizon.aescore.superview.SuperRootScreen
 
 
 enum class AescoreScreen() {

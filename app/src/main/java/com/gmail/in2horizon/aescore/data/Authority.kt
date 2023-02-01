@@ -5,5 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Authority(
     @SerializedName("authority") val
-    authority: String = ""
+    authority: String = "",
+   /* @SerializedName("users") var
+    users: HashSet<User> = HashSet()*/
 ) {}

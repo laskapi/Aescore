@@ -2,7 +2,9 @@ package com.gmail.in2horizon.aescore
 
 
 import com.gmail.in2horizon.aescore.data.*
-import com.gmail.in2horizon.aescore.viewModels.UsersViewModel
+import com.gmail.in2horizon.aescore.retrofit.ApiService
+import com.gmail.in2horizon.aescore.retrofit.RetrofitClient
+import com.gmail.in2horizon.aescore.viewmodel.UsersViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*

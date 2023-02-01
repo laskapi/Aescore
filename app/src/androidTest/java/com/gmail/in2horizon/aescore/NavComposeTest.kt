@@ -5,7 +5,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.gmail.in2horizon.aescore.data.UserRepository
-import com.gmail.in2horizon.aescore.viewModels.UsersViewModel
+import com.gmail.in2horizon.aescore.viewmodel.UsersViewModel
 import com.gmail.in2horizon.aescore.ui.theme.AescoreTheme
 import com.gmail.in2horizon.aescore.views.NavCompose
 import org.junit.Rule

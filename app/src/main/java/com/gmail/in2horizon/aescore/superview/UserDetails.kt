@@ -1,4 +1,4 @@
-package com.gmail.in2horizon.aescore.views.superComposables
+package com.gmail.in2horizon.aescore.views.`super`
 
 import android.util.Log
 import androidx.compose.foundation.border
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.gmail.in2horizon.aescore.R
 import com.gmail.in2horizon.aescore.data.Authority
-import com.gmail.in2horizon.aescore.viewModels.UsersViewModel
+import com.gmail.in2horizon.aescore.viewmodel.UsersViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
@@ -125,7 +125,7 @@ fun UserDetails(
             }
         }
 
-        DetailUsersTabListField(user.value.authorities, authorities)
+      //  DetailUsersTabListField(user.value.authorities, authorities)
 
 
         Row(
@@ -142,7 +142,7 @@ fun UserDetails(
 
               //  addRandomUserForTests(coroutine,usersViewModel::updateLocalSelectedUser)
                 coroutine.launch {
-                    val res = usersViewModel.updateUser().await()
+                    val res = usersViewModel.updateUserAsync().await()
                     if (res) {
                         back()
                     }
